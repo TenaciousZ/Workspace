@@ -2,7 +2,7 @@ Java开发环境搭建
 
 #Date: 2017/04/06
 #__author__:顽强
-
+1
 
 JDK安装:
 	JDK版本:jdk-8u121-windows-i586_8.0.1210.13.exe
