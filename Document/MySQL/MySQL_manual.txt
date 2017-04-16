@@ -1,0 +1,202 @@
+MySQL 手册
+Date:2017-03-30
+__author__:顽强
+
+#操作表
+1.修改表名
+	>alter table table_old rename table_new;
+2.删除表
+	>drop table tabelname;
+3.修改字段类型,长度
+	>alter table table_name modify column_name varchar(50) ;
+4.修改字段名称
+	>alter table table_name change old_col_name new_col_name varchar(20);
+5.添加字段
+	>alter table table_name add col_name char(2);
+6.查询重复的字段
+	>select column_name,count(1) as count from user_table group by column_name having count>1;
+7.删除重复字段(更换的方法是建一张表来过滤设置主键)
+	>DELETE from keyword_info WHERE keyword in (select keyword from (select keyword,count(1) as count from keyword_info GROUP BY keyword HAVING count>1) as b) LIMIT 1
+8.查询插入另一张表(假如两个表字段一样可以这样)
+	>INSERT INTO table1 SELECT * FROM table2 LIMIT 1
+	#指定字段
+	>INSERT INTO table1(field1,field2) SELECT field3,field4 FROM table2 LIMIT 1
+9.批量插入
+	>INSERT INTO table_name (field1,field2,field3) VALUES ('abc','bcd','123'),('cdb','zsl','999');
+10.表字段设置不为空
+	>ALTER TABLE table_name MODIFY COLUMN col_name char(2) NOT NULL;
+11.删除主键,增加主键
+	>ALTER TABLE table_name DROP CONSTRAINT primary_name
+	#增加主键
+	>ALTER TABLE table_name ADD CONSTRAINT primary_name PRIMARY KEY(column_name)
+12.关联查询
+	#要注意,当WHERE条件后面加了b表的条件时,会变成内连接,而不是左连接
+	>SELECT a.field1,b.field2 FROM table_a a LEFT JION table_b b ON a.field3 = b.field4 WHERE a.field5 = 'abc' 
+13.添加表普通索引
+	>ALTER TABLE `table_name` ADD INDEX index_name ( `column` )  //index_name 可以自定义
+14.删除索引
+	>ALTER TABLE `table_name` DROP INDEX index_name
+15.修改索引
+	>ALTER TABLE `test_replaceinto` DROP INDEX `uid1` , ADD UNIQUE INDEX `uid1` (`uid`, `isTmall`) USING BTREE ;
+16.修改表引擎
+	>alter table table_name engine=myisam;//myisam 这个引擎搜索速度比较快
+17.REPLACE INTO 插入或者更新(当主键或唯一索引存在时更新字段)
+	>REPLACE INTO table_name(column)values(1),(2),(1);
+18.查询结果导出成xsl文件
+	>SELECT 
+	n.brand,p.nid,p.prop,p.adddate
+	FROM 
+		xtep_pree_props p 
+	left join
+		xtep_pree_nid n
+	on p.nid=n.nid
+	WHERE  p.adddate='2016-12-11' ORDER BY n.brand
+	into outfile 'C:/Users/Administrator/Desktop/test.xlsx';
+19.查询表数据量
+	SELECT 
+		TABLE_NAME,TABLE_ROWS,DATA_LENGTH/1024/1024 "DATA_LENGTH",CREATE_TIME,TABLE_COLLATION 
+	FROM
+ 		INFORMATION_SCHEMA.TABLES 
+ 	WHERE 
+ 		TABLE_SCHEMA = 'db_name' AND TABLE_NAME = 'table_name' ORDER BY TABLE_ROWS DESC
+20.计算时间差
+ 	SELECT round(TIMESTAMPDIFF(second,update_time,end_time)/60,2) as diff_time FROM spider_jobs WHERE task_type = 'search' AND `status` = '2' LIMIT 100;
+21.对GROUP BY 这个字段的结果,进行再一次的统计,IFNULL 如果为空命名为sum
+	 	SELECT 		
+			IFNULL(fetch_api,'sum')fetch_api,
+			count(1) ,
+			adddate 
+		FROM 
+			keywords_search_info
+		WHERE 
+			adddate = '2017-01-07'
+		GROUP BY fetch_api WITH ROLLUP
+22.中位数,查找各个爬虫任务时间的中位数
+	select e.task_type, e.job_time
+		from spider_job_stat e, spider_job_stat d
+		where e.task_type = d.task_type
+		group by e.task_type, e.job_time
+		having sum(case when e.job_time = d.job_time then 1 else 0 end)>= abs(sum(sign(e.job_time - d.job_time)))
+23.查a表更新a表
+	>update keywords_search_info k1,
+	(select nick,nid from keywords_search_info where adddate=20161121 and isTmall=4 ) k2 
+	set k1.nick=k2.nick
+	where k1.nid=k2.nid and k1.adddate=20161122 and isTmall=4;
+
+
+表分区:
+24.查看表分区的信息
+	>SELECT 
+	TABLE_NAME as tbl
+	,PARTITION_NAME as pn
+	,PARTITION_ORDINAL_POSITION as pop
+	,PARTITION_METHOD as pm
+	,PARTITION_EXPRESSION as pe
+	,PARTITION_DESCRIPTION as pd
+	,TABLE_ROWS as t_rows
+	,AVG_ROW_LENGTH as avgrl
+	,DATA_LENGTH as dl
+	,MAX_DATA_LENGTH as mdl
+	,INDEX_LENGTH as il
+	,DATA_FREE as df
+	,CREATE_TIME as ct
+	,UPDATE_TIME as ut
+	,CHECK_TIME as cht
+	,CHECKSUM as ch
+	,PARTITION_COMMENT as pc
+	,NODEGROUP as ng
+	,TABLESPACE_NAME as tsn
+	FROM INFORMATION_SCHEMA.PARTITIONS WHERE TABLE_NAME='shop';
+25.删除分区
+	>ALTER TABLE search DROP PARTITION part_name;
+26.清空分区数据
+	>ALTER TABLE search truncate PARTITION part_name;
+27.普通表改成分区表
+	#1.
+	>ALTER TABLE `search`
+	PARTITION BY RANGE (to_days(dt)) ( 
+	    PARTITION p_max VALUES LESS THAN MAXVALUE  
+	);
+	#2.
+	ALTER TABLE `search`
+	partition by range COLUMNS(dt) ( 
+	    PARTITION p_max VALUES LESS THAN MAXVALUE  
+	);
+	
+28.添加最大分区(在没有最大分区的情况下)
+ALTER TABLE part_date2 ADD PARTITION ( PARTITION p_max VALUES LESS THAN (MAXVALUE))
+
+29.有最大分区,添加分区
+ALTER TABLE part_date2 REORGANIZE PARTITION p_max INTO ( 
+PARTITION p201104 VALUES LESS THAN ('2011-01-02 23:59:59'),
+PARTITION p_max VALUES LESS THAN (MAXVALUE)
+)
+
+
+#其他
+1.查询建表语句
+	>show create table table_name;
+2.查看自定义函数 所有数据库的
+	>SELECT * FROM mysql.proc
+3.创建函数在查询窗口(delimiter 自定义边界符 // xxxxx// 是边界符,Mysql默认的边界符是`;`)
+	delimiter //
+		CREATE PROCEDURE `addPartition`()
+		begin
+			declare theDate varchar(50);
+			declare sDate varchar(50);
+			declare pName varchar(50);
+			declare today varchar(50);
+			declare tableName varchar(50);
+			declare i int;
+
+			set tableName = 'keywords_search_info';
+			set i = 1;
+
+			set today = curdate();
+			set theDate = today;
+
+			WHILE theDate <= today DO
+			SET theDate = DATE_ADD(theDate, INTERVAL i DAY);
+			set pName = CONCAT('p', replace(theDate, '-', ''));
+
+			SET @sql = CONCAT('ALTER TABLE ', tableName, ' ADD PARTITION (PARTITION ', pName, ' VALUES LESS THAN (\'', theDate, '\'))');
+
+			PREPARE stmt from @sql;
+			EXECUTE stmt;
+			DEALLOCATE PREPARE stmt;
+
+			#set i = i +1;
+			END WHILE;
+		end
+		//
+4.创建事件
+	>CREATE EVENT `e_addPartition` ON SCHEDULE EVERY 1 DAY STARTS '2016-12-07 00:00:00' ON COMPLETION PRESERVE ENABLE DO CALL addPartition()
+
+5.一次建好50天的分区,有max分区:
+	delimiter //
+		CREATE PROCEDURE `addPartition`()
+		begin
+			declare theDate varchar(50);
+			declare pName varchar(50);
+			declare tableName varchar(50);
+			declare i int;
+
+			set tableName = 'keyword';
+			set i = 1;
+
+			WHILE i <= 50 DO
+			SET theDate = DATE_ADD(CURDATE(), INTERVAL i DAY);
+			set pName = CONCAT('p', replace(theDate, '-', ''));
+
+			SET @sql = CONCAT("ALTER TABLE ", tableName," REORGANIZE PARTITION p_max INTO ( 
+					PARTITION ",pName," VALUES LESS THAN ('",theDate,"'),
+					PARTITION p_max VALUES LESS THAN (MAXVALUE))");
+			
+			PREPARE stmt from @sql;
+			EXECUTE stmt;
+			DEALLOCATE PREPARE stmt;
+
+			set i = i +1;
+			END WHILE;
+		end
+	//
