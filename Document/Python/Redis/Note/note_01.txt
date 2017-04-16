@@ -1,0 +1,19 @@
+#-*-coding:utf8-*-
+#__author__:顽强
+import redis
+# rcon = redis.StrictRedis(host='192.168.72.128',port=6379,db=0)
+#建立数据库连接
+rcon = redis.Redis(host='192.168.72.128',port=6379,db=0)
+#管道
+_pipe = rcon.pipeline()
+
+# _pipe.set('hello','redis')
+# _pipe.sadd('faz','baz')
+# _pipe.incr('num') 
+# _pipe.execute()
+
+# print rcon.keys('*')
+# rcon.delete('hello')
+# rcon.expire('faz',30)
+print rcon.ttl('faz')
+print rcon.keys('*')
