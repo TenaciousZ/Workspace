@@ -1,0 +1,25 @@
+Redis学习
+
+安装redis Python模块
+	pip install redis
+
+Linux:
+	1.进入源码包目录:cd /usr/local/src
+	2.下载压缩包:wget https://pypi.python.org/packages/source/r/redis/redis-2.10.5.tar.gz
+	3.解压安装包:tar -zxvf redis-2.9.1.tar.gz
+	4.进入文件夹:cd redis-2.9.1
+	5.编译:python setup.py build
+	6.安装:python setup.py install
+
+
+学习代码:
+import redis
+rcon = redis.Redis(host="localhost",port=6379,db=0)
+_pipe = rcon.pipeline() 创建一个管道
+
+rcon.set('name','Tacey Wong')
+_pipe.set('hello','redis')
+_pipe.sadd('faz','baz')
+_pipe.incr('num') 
+一次性执行上边的三个命令
+_pipe.execute()
