@@ -1,0 +1,98 @@
+
+新建Svn版本库服务器
+	1.mkdir -p /home/admin/svn_repositories 创建版本库目录
+	#创建第一个版本库服务器目录
+	2.mkdir -p /home/admin/svn_repositories/Workspace.svn
+	#建立第一个版本库服务器
+	3.svnadmin create /home/admin/svn_repositories/Workspace.svn
+	#编辑svn配置文件
+	4.vi /home/admin/svn_repositories/Workspace.svn/conf/svnserve.conf
+		[general]
+			#匿名用户访问没有读写权限 可以是read,write,none,默认为read
+			anon-access=none
+			#授权用户有写权限
+			auth-access=write
+			#用户名密码文件统一保存
+			password-db=/home/admin/svn_repositories/etc/user_info
+			#用户访问中心库地址权限控制文件统一保存
+			authz-db=/home/admin/svn_repositories/etc/auth_info
+			#svn简介
+			realm = 工作学习编程的地方
+	5.mkdir -p /home/admin/svn_repositories/etc
+	6.cp /home/admin/svn_repositories/Workspace.svn/conf/passwd /home/admin/svn_repositories/etc/user_info
+	7.cp /home/admin/svn_repositories/Workspace.svn/conf/authz /home/admin/svn_repositories/etc/auth_info
+	#配置访问者用户名,密码
+	8.vi + /home/admin/svn_repositories/etc/user_info
+		在[users]下面插入一行:
+		zsl = 123456
+	#配置访问用户的访问目录地址
+	9.vi + /home/admin/svn_repositories/etc/auth_info
+		[/]
+		zsl = rw //给该用户访问所有库的下载,提交权限
+		 或
+		[Workspace.svn:/]  
+		zsl = rw //Workspace.svn库的下载提交权限,)
+	10.su - root 切换到root账户配置防火墙端口
+		vi /etc/sysconfig/iptables 配置防火墙端口(
+			添加一行,监听svn端口用
+			-A INPUT -m state --state NEW -m tcp -p tcp --dport 3690 -j ACCEPT
+			重启防火墙
+			service iptables restart)
+	11.svnserve -d -r /home/admin/svn_repositories 启动svn服务 (启动的时候 指定了/home/admin/svn 作为根目录)
+
+	12.netstat -ln |grep 3690 检测svn端口是否开启
+	13.killall svnserve 杀死svn所有进程
+	14.svn co svn://192.168.72.128/Workspace.svn Workspace 检出
+
+	配置svn自动更新
+	16.mkdir -p ~/svnup && vi ~/svnup/workspace.sh (
+		加入一行:/usr/bin/svn update /home/admin/Workspace/)
+	17.复制钩子脚本
+		cd /home/admin/svn_repositories/Workspace.svn/hooks && cp post-commit.tmpl post-commit
+
+	18.vi + /home/admin/svn_repositories/Workspace.svn/hooks/post-commit(
+	 	最后一行加上:/bin/bash /home/admin/svnup/workspace.sh)
+
+	19.chmod +x /home/admin/svn_repositories/Workspace.svn/hooks/post-commit
+
+
+
+
+
+-- svn 免密自动更新到多台机器
+2017-02-07
+svn 机器 S 自动提交到 其他机器(A,B,C,D)
+前提: svn服务器端 S 可以 免密码访问 A,B,C,D
+
+编辑svn自动提交shell脚本
+1).mkdir -p ~/svnup && vi ~/svnup/spider1.sh (
+		-p 如果文件夹存在则不创建
+		/usr/bin/svn update /home/admin/spider1/ 加入一行,更新svn)
+
+2).ssh免密码登录
+	1.su amdin 切换用户 (机器S)
+	2.ssh-keygen -t rsa 指定加密算法为rsa(
+			回车1 保存私钥全路径
+			回车2 密码可以为空
+			回车3 生成公钥
+			/home/admin/.ssh 此时会在目录下生成密钥对)
+	3.scp -P 22 root@198.168.1.12:~/.ssh/id_rsa.pub ~/.ssh/id_rsa.pub (
+			root@198.168.1.12:~/.ssh/id_rsa.pub 把服务器的密钥 (机器S)
+			拷贝到本地 ~/.ssh/id_rsa.pub (机器 ABCD))
+	4.cd ~/.ssh && mv id_rsa.pub authorized_keys && chmod 600 authorized_keys (
+			&& 用于连接命令
+			1.进入目录
+			2.改名
+			3.降权限 机器(ABCD))
+3).编辑 机器 S 的 
+	1.cd /home/admin/svn/spider1.svn/hooks/
+	2.vi post-commit 编辑钩子(
+			/usr/bin/ssh admin@192.168.1.13 -p 22 "/bin/bash /home/admin/svnup/spider1.sh"
+			/usr/bin/ssh admin@192.168.1.14 -p 22 "/bin/bash /home/admin/svnup/spider1.sh"
+			/usr/bin/ssh admin@192.168.1.15 -p 22 "/bin/bash /home/admin/svnup/spider1.sh"
+			注释:
+			/usr/bin/ssh admin@192.168.1.13 -p 22 ssh免密登录(机器A)
+			/usr/bin/ssh admin@192.168.1.14 -p 22 ssh免密登录(机器C)
+			/usr/bin/ssh admin@192.168.1.15 -p 22 ssh免密登录(机器D)
+			"/bin/bash /home/admin/svnup/spider1.sh" 执行脚本)
+
