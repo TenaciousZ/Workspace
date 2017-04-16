@@ -1,0 +1,30 @@
+
+__author__:顽强
+2017-03-17
+
+安装Redis
+操作系统: Centos6 64位
+1.cd /usr/local/src && wget  http://download.redis.io/releases/redis-3.2.8.tar.gz 下载安装包
+2.tar xzf redis-3.2.8.tar.gz 解压压缩包
+3.cd redis-3.2.8 && make 编译 安装
+4.mv redis-3.2.8 /usr/local/redis 移动到local文件夹下
+#配置服务
+5.cp /usr/local/redis/utils/redis_init_script /etc/rc.d/init.d/redis 复制redis服务脚本到系统服务文件下
+6.vi /etc/rc.d/init.d/redis 编辑redis服务脚本(
+	1.#chkconfig: 2345 80 90 增加到第二行
+	2.EXEC=/usr/local/redis/src/redis-server
+	  CLIEXEC=/usr/local/redis/src/redis-cli 修改这两行调用路径
+	3.$EXEC $CONF & 找到$EXEC $CONF这句后面加&)
+7.mkdir -p /etc/redis && cp /usr/local/redis/redis.conf /etc/redis/6379.conf (
+	将redis配置文件拷贝到/etc/redis/${REDISPORT}.conf )
+8.vi /etc/profile 添加redis环境变量(
+	1.export PATH="$PATH:/usr/local/redis/src" 最后一行
+	2.. /etc/profile 执行环境变量配置文件)
+ 
+ 
+
+Redis 命令
+1.nohup src/redis-server   #& 后台开启redis 服务
+2.src/redis-cli #进入数据库操作
+3.CONFIG GET * #查看配置信息
+
