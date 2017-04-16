@@ -1,0 +1,39 @@
+Redis的主要配置
+
+我的配置文件地址:vi /etc/redis/6379.conf
+
+以下默认第一个参数是key,第二个参数是配置的value
+
+1.配置保存数据库的地址
+	因为要保存数据库所以要先新建一个目录来保存
+	1).mkdir -p /usr/local/redis/db
+	2).vi /etc/redis/6379.conf
+		k		value
+		dir /usr/local/redis/db #数据库保存的路径
+		dbfilename dump.rdb (数据库文件名可以不改)
+
+2.日志输出配置
+	1).mkdir -p /usr/local/redis/log
+	2).vi /etc/redis/6379.conf
+		k			value
+		loglevel 	notice (默认级别日志)
+		logfile /usr/local/redis/log/redis.log
+
+3.设置客户端连接密码
+	1).vi /etc/redis/6379.conf
+		k 			value
+		requirepass redis-zsl #密码就是 redis-zsl
+	修改密码后停止服务需要密码验证
+	要关闭服务需要
+	vi /etc/rc.d/init.d/redis(因为我把redis加入系统服务了)
+	编辑这句加上密码验证(就是关闭客户端需要密码验证):
+	$CLIEXEC -a redis-zsl -p $REDISPORT shutdown
+
+	#网络复制的参考
+    (设置密码后，客户端连接服务端需要加上-a来获得授权：
+	# /home/program/redis/bin/redis-cli -a redis-test
+       同时，停止服务也需要加入密码验证：
+	# /home/program/redis/bin/redis-cli -a redis-test shutdown)
+
+
+
