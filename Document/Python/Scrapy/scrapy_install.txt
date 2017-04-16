@@ -1,0 +1,22 @@
+系统:Windows
+1.安装python2.7
+	需要安装pip和添加环境变量
+
+2.安装Scrapy依赖包
+	pip install lxml==3.6.0
+	pip install zope.interface
+	pip install  Twisted==16.2.0 (试试安装包安装 (需要VCforPython27环境))
+	pip install  pyOpenSSL  
+	pip install pywin32==219 (试试安装包安装)
+
+3.安装Scrapy
+	pip install Scrapy
+
+
+
+
+###实在安装不成功
+1.直接替换掉 python安装目录下的Lib/site-packages(前提是有一台机器安装好了)
+2.重新安装pywin--219 (安装程序的方式安装)
+3.安装VCforPython27
+4.重新安装 Scrapy
