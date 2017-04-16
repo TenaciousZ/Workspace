@@ -1087,11 +1087,10 @@ class ZYMail_z(object):
     @classdoc
     '''
     def __init__(self):
-        self.mail_to = ['576879814@qq.com']
+        self.mail_to = ['xxx@qq.com']
         self.title = '爬虫日志'
         self.conent_type = 'html' #正文数据类型
         self.smtp_server = 'smtp.exmail.qq.com' #服务器地址
-        # self.mail_from = 'zsl@chinaclouddata.cn'
         self.mail_from = FROM_EMAIL_DICT['user_name']
         self.att = ''#附件
 
