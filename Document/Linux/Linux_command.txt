@@ -1,0 +1,97 @@
+
+__author__:顽强
+
+
+1.常用命令:
+	ls dirname 不进入文件夹查看
+	ls -lh 查看文件大小以M为单位
+	ll 查看文件大小以k为单位
+	rm a.txt 删除文件
+	rm -rf dirname  删除文件夹
+	vi fname.txt 编辑或者新建文件
+	file fname.txt 查看文件类型,详情
+	file * 查看目录下的所有文件类型,详情
+	cp -r /tmp/a /root/a 复制文件夹
+	sz 发送文件(服务器要发送文件)压缩文件包
+	rz 下载文件(服务器要接收文件)压缩文件包
+	mv fname(前) fname2(后) 更改文件或者文件夹名字
+	mv xtep_shell_1.sh ../qqd_client_spiders/移动文件到另一个文件夹
+	unzip fname  解压zip文件
+	tar zcvf filaname.tar.gz filename 压缩文件
+	tar -zxvf Python-2.7.9.tgz 解压tgz
+	more fname 查看部分内容,按空格继续
+	cat fname 查看全部内容/内容太多的时候不好用
+	less fname1 fname2 fname3 {
+		1.G 直接查看最后一行
+		2.ctrl + F 向前移动一个屏幕
+		3.ctrl + B 向后移动一个屏幕
+	}
+	grep "item_scraped_count" numsp.log -A 10 查找文件中所有('item_scraped_count')后面的10行内容
+	> fname 清空文件
+	pwd 查看当前文件的路径
+	find / -name fname 查找文件路径
+	vi编辑器下3中模式{
+		1.刚进入是命令模式{
+			1.复制正行 yy
+			2.复制单词 yw
+			3.粘贴 p
+			4.dd 删除整行
+			5.dd10 删除光标以下10行
+			6.u 撤销操作
+			7.Ctrl + R 反撤销
+			8.移动光标{
+				1.( 句首
+				2.) 句尾
+				3.{ 段落首
+				4.} 段落尾
+				5.0 行首
+				6.$ 行末
+			}
+		}
+		2.输入I 是输入模式
+		3.输入: 是末行模式{
+			1.q! 退出不保存
+			2.wq! 保存写入退出
+		}
+	}
+	clear 命令行清屏
+	& 命令后面加上& 转后台执行
+	yum search xxx 搜索安装包
+	命令介绍:{
+	grep 全称是Global Regular Expression Print，表示全局正则表达式匹配搜索
+	awk 是一个强大的文本分析工具
+	}
+
+
+2.网络:
+	ps -ef 查看进程
+	ps uxf 查看整洁的进程
+	ps -ef|grep xxxx 查看关键字进程
+	pmap -d 5647  可以根据进程查看进程相关信息占用的内存情况
+	free 查看内存使用情况
+	kill PID 结束进程
+	top 查看cpu,内存使用情况
+	top -u xxx 查看指定用户
+	source /etc/profile 让配置文件立即生效
+	lsof -i | grep :80
+	df -h 查看磁盘使用情况
+	iptables -L 防火墙
+	ssh root@132.168.1.163 -p 30001 (ssh 连接主机)
+	netstat -ntpl #查看端口
+	netstat -a 查看所有端口
+	
+
+3.权限:
+	useradd admin 添加一个用户账户
+	passwd admin  给新建的admin用户创建密码
+	userdel admin 删除一个用户账户
+	gpasswd -a admin root 将admin 加入root 组
+	groups 	查看用户组信息
+	passwd 修改密码
+	chmod  777 /home 修改home权限
+	su - root 切换到root账户并且定位到根目录
+	忘记root密码
+		1.重启机器在GRUB界面选择系统按e进入编辑
+		2.接下来你可以看到如下图所示的画面 然后你再用上下键选择最新的内核 然后继续按“e”键
+		3.然后在编辑界面rhgb quiet后面加“空格” 然后键入“single”
+		4.回车后，按“b”键启动进入单用户模式，在这里修改root的密码
