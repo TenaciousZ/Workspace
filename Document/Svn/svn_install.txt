@@ -1,0 +1,8 @@
+
+__author__:顽强
+安装环境:centOS6
+
+安装Svn:
+	
+	1.svnserve --version 检测是否安装Svn
+	2.yum install subversion (安装)
