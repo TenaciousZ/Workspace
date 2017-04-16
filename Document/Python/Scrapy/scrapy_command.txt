@@ -1,0 +1,10 @@
+__author__:顽强
+
+Scrapy
+
+1.创建项目
+	scrapy startproject you_project_name
+2.执行爬虫
+	scrapy crawl you_spider_name
+3.抓取并写入文件
+	scrapy crawl you_spider_name -o item.json
