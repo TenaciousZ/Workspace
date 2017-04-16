@@ -1,0 +1,29 @@
+#学习Django做项目
+#__author__:顽强
+
+#2017-03-28
+
+#命令:
+1.创建独立的开发环境(windows)
+	mkvirtualenv minicms
+2.安装Django
+	pip install Django==1.8.3
+3.创建项目
+	django-admin.py startproject minicms
+4.创建app
+	cd minicms
+	django-admin.py startapp news
+	添加 news 到 settings.py 中的 INSTALLED_APPS 
+
+
+#代码:
+1.编写news的model.py
+	...
+2.创建数据库
+	python manage.py makemigrations
+	python manage.py migrate
+
+3.创建超级管理员
+	python manage.py createsuperuser
+4.启动服务
+	python manage.py runserver
