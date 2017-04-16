@@ -1,0 +1,14 @@
+数据结构
+
+# Date:2017/04/05
+# __author__:顽强
+
+
+数据结构是指: 	计算机存储和组织数据的方式
+
+通常经过精心挑选的数据结构,可以带来更高的运行和存储效率
+数据结构常常与检索算法和索引技术相关
+
+
+
+http://baike.baidu.com/link?url=mhry-YVe5C2CIXMd8SwWyFZsCQJCymmNcnDdTg0vE6RzqKaHhKjWJWgA5-CnOiu7W4_cgsN-0ffA4W5hRQFh8KYFcugsLGGu8YJOlwF8d7_Fauxy6zzOqe2OIG6YoQ0E
