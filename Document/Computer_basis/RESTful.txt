@@ -1,0 +1,32 @@
+REST (Representational State Transfer) 表现层状态转化
+REST 是一种原则,遵守这种原则的架构 称作 RESTful架构
+
+#Date:2017/04/06
+#__author__:顽强
+
+之所以晦涩难懂的原因在于主语也就是操作的对象没有说清楚
+全称应该是:Resource Representational State Transfer 
+通俗来讲就是: 资源在网络中以某种形式进行状态转移或转变
+
+分解开来:
+	Resource : 资源,即数据
+	Representational : 表现层(资源是一种信息实体,可以有多种表现形式),即,如 JSON,XML,JPEG等形式
+	State Transfer : 状态变化
+
+
+总结:什么是RESTful架构
+	1.URI 代表的是指向的资源
+	2.客户端和服务器,传递某个资源的某种表现层
+	3.客户端通过HTTP的4个动词,对服务器端的某种资源进行操作,实现表现层状态的转换
+
+HTTP四个动词:GET,POST,PUT,DELETE
+	GET: 用来获取资源
+	POST: 用来新建,也可用来更新资源
+	PUT: 用来更新资源
+	DELETE: 用来删除资源
+
+上网:
+	所谓上网就是与互联网上面的一系列资源互动,调用资源的URI
+
+URI (统一资源定位符):
+	也就是指向资源在服务器上的存放位置,是一个类似URL的地址
