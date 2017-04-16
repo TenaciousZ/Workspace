@@ -1,0 +1,22 @@
+DJango 学习
+安装管理多个开发环境
+	1.pip install virtualenvwrapper-win
+添加环境变量
+	1.添加WORKON_HOME到自己的账户
+	2.设置路径:如D:\Envs
+创建运行环境
+	1.mkvirtualenv zsl：创建运行环境zsl
+	2.workon zsl: 工作在 zsl 环境 或 从其它环境切换到 zsl 环境
+	3.deactivate: 退出终端环境
+
+	---其他的
+	rmvirtualenv ENV：删除运行环境ENV
+	mkproject mic：创建mic项目和运行环境mic
+	mktmpenv：创建临时运行环境
+	lsvirtualenv: 列出可用的运行环境
+	lssitepackages: 列出当前环境安装了的包
+
+安装 Django
+	pip install Django==1.8.16
+
+
