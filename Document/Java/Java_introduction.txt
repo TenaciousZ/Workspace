@@ -1,0 +1,27 @@
+Java
+
+#Date:2017/04/06
+#__author__:顽强
+
+
+Java的核心概念: JVM,JDK,JRE
+
+Java的体系部分:
+	基础核心: JavaSE 是Java的标准版本,包含面向对象,API,JVM等等基本组件
+	JavaSE的基础上又分出了
+		1.JavaEE :是Java的企业版本
+		2.JavaME :主要用于嵌入式开发,像安卓,手机游戏等
+
+JVM (Java Virtual Machine):
+	Java虚拟机:
+		1.JVM 编译test.java源文件成字节码文件
+		2.JVM 解释,执行test.class字节码文件
+
+JDK (Java Development Kit):
+	Java开发工具包
+
+JRE (Java Runtime Environment):
+	Java运行环境
+
+
+事实上当我们安装好了JDK,其实就已经安装好了JRE和JVM
