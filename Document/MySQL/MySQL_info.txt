@@ -1,0 +1,29 @@
+2016/11/14
+Mysql 安全
+
+1.修改root密码
+mysql -h localhost -u root -proot
+>SET PASSWORD FOR 'zsl'@'localhost' = PASSWORD('root1');
+
+2.修改root用户名
+>use mysql;
+>update user set user='zsl' where user='root';
+>flush privileges;#重新加载权限
+
+3.新建恢复root账户;
+>INSERT INTO user SET User='root',Host='localhost',ssl_cipher='',x509_issuer='',x509_subject='';
+>UPDATE user SET Select_priv='Y',Insert_priv='Y',Update_priv='Y',Delete_priv='Y',Create_priv='Y',Drop_priv='Y',Reload_priv='Y',Shutdown_priv='Y',Process_priv='Y',File_priv='Y',Grant_priv='Y',References_priv='Y',Index_priv='Y',Alter_priv='Y',Show_db_priv='Y',Super_priv='Y',Create_tmp_table_priv='Y',Lock_tables_priv='Y',Execute_priv='Y',Repl_slave_priv='Y',Repl_client_priv='Y',Create_view_priv='Y',Show_view_priv='Y',Create_routine_priv='Y',Alter_routine_priv='Y', Create_user_priv='Y',Event_priv='Y',Trigger_priv='Y',Create_tablespace_priv='Y',authentication_string='' WHERE User='root';
+
+4.新建一个自己的用户;
+>create user  zsl_root   IDENTIFIED by 'zsl_root';
+>update user set host='localhost' where user='zsl_root';
+
+5.查看用户的权限
+>show grants for 'zsl_root'
+
+6.给用户授于 查询权限 db=mysql
+>grant select on mysql.*  to zsl_root;
+收回是revoke
+>revoke select on mysql.*  from zsl_root;  
+给予全部权限
+>grant ALL on mysql.*  to zsl_root;
