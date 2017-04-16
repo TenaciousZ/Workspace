@@ -1,0 +1,90 @@
+__author__:顽强
+
+常用快捷键{
+	1.Ctrl + D  选中相同的词
+
+	2.Ctrl + M	光标移动至括号开始或者结束位置
+
+	3.Ctrl + X	剪切光标所在行
+
+	4.Ctrl+Shift+↑	可以移动此行代码，与上行互换
+
+	5.Ctrl+Shift+↓	可以移动此行代码，与下行互换
+
+	6.Tab 缩进
+
+	7.Shift + Tab 反缩进
+
+	8.Ctrl + G 	跳到相应(数字)行
+
+	9.Ctrl + Tab 切换内部窗口(类似Alt + Tab)
+
+	10.Ctrl + C 复制光标所在行(在没有选中词的情况)
+
+	11.Ctrl + Z 撤销操作
+
+	12.Ctrl + Y 反撤销(撤销的后悔药)
+
+	13.Ctrl + 左键(鼠标) 点击产生多个光标
+
+	14.Ctrl + W 关闭当前页
+
+	14_1.Ctrl + M 关闭跳到...比如大括号的头尾
+
+	14_2.Ctrl + Shift + M 选择标签内的内容...比如大括号内部
+
+	15.Ctrl + F 查找
+
+	16.Home/End 光标跳到行(首/尾)
+
+	17.Shift + Home/End 选中光标到行(首/尾) 位置 字符
+
+	18.Ctrl + ←/→ 光标跳到单词(首/尾)
+
+	19.Ctrl + Shift + End/Home 选中光标(以下/以上)的所以内容
+
+	20.Ctrl + {/} 光标所在行反缩进/缩进	比第7个好用
+
+	21.Alt + F3 选中选择的词,在文件内
+
+	22.Ctrl + Shift + V 粘贴并保留原来的缩进,相当好用
+
+	23.Ctrl + k + b 显示和隐藏侧边(一样)
+
+	24.Ctrl + r 查找文件内的函数和类
+
+}
+
+高级快捷键{
+	1.Alt+Shift+1~9（非小键盘）屏幕显示相等数量小窗口
+
+	2.Ctrl + P 快速搜索文件
+
+	3.Ctrl +Shift + F 全局搜索(文件夹内)
+
+	4.配置快速切换项目快捷键
+		[
+			{ "keys": ["ctrl+alt+p"], "command": "prompt_select_workspace" }
+	 	]
+
+	5.配置全文件夹查找函数相当好用
+
+		{ "keys": ["ctrl+shift+r"], "command": "goto_symbol_in_project" },
+
+	6.定位到定义函数的位置
+		1.要先安装插件(SublimeCodeIntel)
+		2.设置快捷键
+
+		{ "keys": ["shift+ctrl+,"], "command": "goto_python_definition"},
+		{ "keys": ["shift+ctrl+."], "command": "back_to_python_definition"}
+
+	7.配置自动换行
+		"word_wrap": true,
+
+}
+
+sublime 的一个小bug{
+	
+	问题:运行python文件的时候 打印不出来
+	解决办法:在菜单栏工具选项,选择编译环境,选择python
+}
