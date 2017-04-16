@@ -1,0 +1,44 @@
+方向
+
+#Date: 2017/04/05
+#author:顽强
+
+
+Big Data时代的需求:
+
+	大数据由爬虫来抓取的
+	需求:
+	1.数据分析服务
+	2.互联网金融
+	3.数据建模
+	4.信息聚类
+	5.自然语言处理
+	6.医疗病例分析
+	这些需求几乎都是由爬虫来抓取实现的
+
+学习Scrapy的流程:
+	1.环境配置和基础知识铺垫
+	2.爬取真实数据
+	3.Scrapy突破反爬虫技术
+	4.Scrapy进阶
+	5.Scrapy redis分布式爬虫
+	6.elastisearch django实现搜索引擎
+
+爬虫基础知识:
+	1.正则表达式
+	2.深度优先,广度优先遍历算法
+	3.url去重常见策略
+
+Scrapy的进阶开发
+	1.Scrapy的原理和中间件的开发
+	2.动态网站的抓取处理
+	3.将selenium和phantomjs集成到Scrapy中
+	4.Scrapy log配置
+	5.email 发送
+	6.Scrapy信号
+
+Redis分布式爬虫
+	1.Scrapy redis 分布式爬虫搭建
+
+elastisearch django 搭建搜索引擎
+	1...
