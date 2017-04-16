@@ -1,0 +1,208 @@
+学习 python 的笔记
+
+#__author__ : 顽强
+#2017-03-11
+
+=======================================================
+第一章:Python的介绍
+
+
+1.Python是一门解释型语言,诞生于1989年
+2.优点:
+
+	1).Python 为我们提供了非常完善的基础代码库(也就是内置库)
+	覆盖了网络、
+	文件、
+	GUI、
+	数据库、
+	文本等大量内容，
+	被形象地称作“内置电池（batteries included）”。
+	***用Python开发，许多功能不必从零编写，直接使用现成的即可。
+	
+	2).Python还有大量的第三方库，
+	也就是别人开发的，供你直接使用的东西。如果你开发的代码通过很好的封装，
+	也可以作为第三方库给别人使用。
+	
+	3).Python语言的定位
+		简练:(
+			#例子1:对换两个变量的值
+			#简练写法:
+			a = 1
+			b = 2
+			a,b = b,a
+			print a,b
+
+			#正常写法
+			a = 4
+			b = 5
+			c = a #多出来一个变量
+			a = b
+			b = c
+			print a,b)
+		明确:(
+			#例子2:列出列表的key和value
+			#明确的写法
+			array = [1, 2, 3, 4, 5]
+			for i, e in enumerate(array,0):
+			    print i, e
+
+			#复杂的写法
+			for i in xrange(len(array)):
+			    print i, array[i])
+		优雅:(
+			#例子3:变量是否为空
+			name = 'Tim'
+			langs = ['AS3', 'Lua', 'C']
+			info = {'name': 'Tim', 'sex': 'Male', 'age':23 }    
+
+			#优雅的写法
+			if name and langs and info:
+			    print('All True!')  #All True!
+
+			#普通的写法
+			if name != '' and len(langs) > 0 and info != {}:
+			    print('All True!') #All True!)
+
+3.Python的缺点:
+	第一个缺点就是运行速度慢，和C程序相比非常慢，
+	因为Python是解释型语言，你的代码在执行时会一行一行地翻译成CPU能理解的机器码，
+	这个翻译过程非常耗时，所以很慢。
+	而C程序是运行前直接编译成CPU能执行的机器码，所以非常快。
+
+	但是,
+	是大量的应用程序不需要这么快的运行速度，因为用户根本感觉不出来。
+	例如开发一个下载MP3的网络应用程序，
+	C程序的运行时间需要0.001秒，
+	而Python程序的运行时间需要0.1秒，慢了100倍，
+	但由于网络更慢，需要等待1秒，
+	你想，用户能感觉到1.001秒和1.1秒的区别吗？
+
+为什么
+1) 开发效率远比执行效率要高
+2) 对于低效的可以采用c/c++来写，然后封装成python的模块，所以用python写的只是不太关注效率的东西
+3) 看你的应用对效率的要求有多少，对于web还有象使用cache的技术，非常适合动态语言，一样可以提高效率
+4) 有时效率的瓶颈并不在语言的解释处理上，而主要在网络，数据库上，因此语言执行的速度不一定是效率低的原因，特别是对于大批量并发的情况
+5) python中一些常用的内置模块许多就是使用C写的，不存在什么效率问题
+6) 你仍然可以对python进行性能优化，从而实现尽可能高的性能因为它是开源的。
+
+=======================================================
+第二章:学习Python遇到的问题
+
+1.Python 的数据类型
+	
+	int(整型),float(浮点型),str(字符串类型),bool(布尔值类型),None(空值类型)
+	list(列表),
+	tuple(元组),
+	dict(字典),
+		由key 和 value 组成,其中key是不可变的
+	set()(集合)
+		set无序和无重复 元素 的集合，
+		两个set可以做数学意义上的交集、并集等操作
+		& 并集 a & b 获取a集合跟b集合的所有元素
+		| 交集 a | b 获取a集合跟b集合所有重合的元素
+		^ 差集 a ^ b 获取a集合跟b集合所有不重合的元素
+		- 如: a - b 获取a集合中跟b集合不重重合的元素
+
+2.字符串和编码
+	统一编码:
+	Python代码统一保存UTF-8格式
+	默认utf8编码的字符串类型是 str
+	默认unicode编码的字符串类型是 unicode
+	如何转换:
+		Unicode把所有语言都统一到一套编码里
+		在计算机内存中，
+		统一使用Unicode编码，
+		当需要保存到硬盘或者需要传输的时候，
+		就转换为UTF-8编码
+
+		编码与解码:
+		unicode转成utf8编码的过程叫编码
+		urf8 转成 unicode 的过程叫解码
+		unicode -> utf8  如: u'中文'.encode('utf8')
+		utf8 -> unicode   如: 直接强制转换 
+				u'中文' 	或者
+				'中文'.decode(chardet.detect('中搞')['encoding'])
+
+		直接在windows IDLE里面输入的中文编码不是utf8
+		chardet.detect('中文')
+		{'confidence': 0.682639754276994, 'encoding': 'KOI8-R'}
+		chardet.detect('中高温')
+		{'confidence': 0.25598990785387277, 'encoding': 'IBM855'}
+		'中搞'.decode(chardet.detect('中搞')['encoding'])
+
+	字符串的拼接
+		print u'中文'+u'中文' #unicode类型的字符串 不能直接操作 str类型的字符串需要转成utf8
+		print '中文%s'%(2)
+		print '中文{1}{0}'.format('中文','文一')
+
+
+3.函数(方法)
+#参赛的定义和使用
+1.name1,name2是必选参数,调用函数的时候必须要传
+2.age,city是默认参数调用函数的时候可以不用传
+#例子1
+def enroll(name1, name2, age=6, city='Beijing'):
+print 'name1:', name1
+print 'name2:', name2
+print 'age:', age
+print 'city:', city
+
+	enroll(name2=1,name1=2,city='Xiamen')
+	enroll(1,2,3,4)
+
+	#例子2默认参数必须是固定的对象
+	def add_end(L=[]):
+		print 'L = ',L
+		L.append('END')
+		return L
+
+	print 1
+	print add_end()
+	print 2
+	print add_end()
+	print 3
+	print add_end()
+
+	#例子3可变参数
+	3.可变参数是把参数组合成一个list or tuple
+	def calc(*numbers):
+	    sum = 0
+	    for n in numbers:
+	        sum = sum + n * n
+	    return sum
+
+	print calc(1,2,3,4)
+	num = range(5)
+	print calc(*num) #*+list or *+tuple
+
+	#例子4
+	4.关键词参数
+	def person(name, age, **kw):
+	    print 'name:', name, 'age:', age, 'other:', kw
+	person(1,2,c=3,d=4) #自动把 c=3,d=4 转换成 dict 所以说是关键词参数
+	kw = {'a':1,'b':2}
+	person(1,2,**kw) #** + dict 
+
+	#例子5
+	5.高阶函数
+	#函数可以作为变量,赋值,也可以作为一个参数
+	f = person
+	f(1,2)
+
+	def add(x,y,f):
+		return f(x) + f(y)
+
+	print type(abs) #内建函数
+	print add(1,-10,abs)
+
+
+4.Python的class(类)
+	注意到__init__方法的第一个参数永远是self，
+	表示创建的实例本身，
+	因此，在__init__方法内部，
+	就可以把各种属性绑定到self，
+	因为self就指向创建的实例本身。
+
+	类的继承:
+	当我们定义一个class的时候，可以从某个现有的class继承，新的class称为子类（Subclass），而被继承的class称为基类、父类或超类（Base class、Super class）。
+
