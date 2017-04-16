@@ -1,0 +1,85 @@
+
+日期:2017-02-05
+__author__:	顽强
+系统: centos7 
+MySQL版本:	安装mysql 5.7
+
+1).解压安装包
+	1.http://mirrors.sohu.com/mysql/ 下载 mysql-5.7.16-linux-glibc2.5-x86_64.tar.gz
+	2.到 /usr/local/src(用户放源码包的目录) 目录下命令:rz 从windows 上传文件 mysql-5.7.16-linux-glibc2.5-x86_64.tar.gz
+	3.创建mysql 目录 mkdir -m777 -p /usr/local/mysql (
+		-m : 对新建目录设置存取权限
+		-p : 此时若路径中的某些目录尚不存在，系统将自动建立好那些尚不存在的目录
+		/usr/local/ 用户存放程序的目录)
+	4.解压 tar -zxvf mysql-5.7.16-linux-glibc2.5-x86_64.tar.gz (
+					tar备份,压缩与解压缩,Linux命令，也是一个工具
+					-z            : 表示 tar 包是被 gzip 压缩过的，所以解压时需要用 gunzip 解压
+					-x            : 从 tar 包中把文件提取出来
+					-v            : 显示详细信息
+					-f xxx.tar.gz : 指定被处理的文件是 xxx.tar.gz
+					tar.gz的用tar zxvf解压，tar.bz2的用tar jxvf解压)
+	5.mv /usr/local/src/mysql-5.7.16-linux-glibc2.5-x86_64/* /usr/local/mysql
+2).创建用户组mysql
+	1.groupadd mysql 增加mysql这个用户,作为系统账号,同时添加到mysql组理,主目录是/usr/local/mysql
+	2.useradd -r -g mysql mysql -d /usr/local/mysql (
+					useradd命令用来建立用户帐号和创建用户的起始目录，该命令使用权限是终极用户。新建用户密码为空
+					－g : 指定用户所属的起始群组。
+					－d : 指定用户登入时的启始目录。
+					－s : 指定用户登入后所使用的shell。-s /sbin/nologin 是不让登录shell
+					-g后第一个mysql是组名，第二个mysql是新建的用户名，新建用户信息可在/etc/passwd文件中查到)
+	3.passwd mysql 设置mysql用户的密码，设置密码时输入的密码不可见，这里设为123456，回车确认
+	4.chown -R mysql:mysql /usr/local/mysql 将/usr/local/mysql目录下归属到mysql用户及mysql组(
+					chown 命令 更改某个文件或目录的属主和属组。
+					-R : 递归式地改变指定目录及其下的所有子目录和文件的拥有者。
+					-v : 显示chown命令所做的工作。
+					mysql:mysql，第一个mysql是用户名，第二个mysql是组名)
+3).安装mysql数据库
+	#yum install -y perl-Module-Install.noarch 下面执行安装mysql_install_db时需要先安装perl-Module-Install.noarch(mysql5.6)
+	1.su mysql 由当前用户切换到mysql用户(
+					su 用户名，是切换到其他用户，但是不切换环境变量
+					su - 用户名，是完整的切换到一个用户环境)
+	2./usr/local/mysql/bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data
+4).配置
+	1.cd /usr/local/mysql/support-files 进入mysql配置文件目录
+	2.cp my-default.cnf /etc/my.cnf 复制配置文件到
+	3.cp mysql.server /etc/init.d/mysql 将mysql加入到可控制启动的服务的文件夹内，并命名mysql，即service可控制的服务名，(
+					至此可用service mysql start控制启动mysql/etc/init.d 是/etc/rc.d/init.d的链接，
+					在/etc/init.d添加一个文件会同步在/etc/rc.d/init.d下添加一个相同文件)
+	4.vim /etc/init.d/mysql 修改自启动调用的路径。(
+					其实若mysql的安装目录是/usr/local/mysql,则可省略此步
+					vim编辑器，是vi的升级版本，它不仅兼容vi的所有指令，而且还有一些新的特性在里面
+					进入后按键盘i进行编辑，修改如下俩值
+					basedir=/usr/local/mysql
+					datadir=/usr/local/mysql/data
+					编辑后按esc键输入:wq按回车保存。:q!是不保存退出)
+	5.chkconfig --add mysql 让mysql服务加入到开机启动指令管理的服务列表中(
+					chkconfig命令主要用来更新（启动或停止）和查询系统服务的运行级信息。
+					谨记chkconfig不是立即自动禁止或激活一个服务，它只是简单的改变了符号连接
+					--add : 增加所指定的系统服务，让chkconfig指令得以管理它，
+					并同时在系统启动的叙述文件内增加相关数据。服务脚本必须存放在/etc/ini.d/目录下)
+	6.chkconfig mysql on  开机自启动mysql服务 (on : 针对的服务有等级限制，具体查询chkconfig详细)
+	7.vim /etc/profile 配置环境变量，这个文件是每个用户登录时都会运行的环境变量设置(
+					在最下面添加下面两个值
+					export MYSQL_HOME="/usr/local/mysql"
+					export PATH="$PATH:$MYSQL_HOME/bin"
+					然后保存)
+	8.. /etc/profile 让修改的profile文件立即生效
+	9.service mysql start 启用mysql，或者命令systemctl start mysql
+5).忘记root密码
+	1.vim /etc/my.cnf 编辑mysql配置文件([mysqld] 在下面加入一行 skip-grant-tables 跳过权限)
+	2.service mysql restart 重启服务
+	3.在cmd输入mysql
+		>use mysql
+		>UPDATE user SET authentication_string = PASSWORD('root') WHERE User = 'root';#具体情况具体分析,mysql5.52 密码字段是Password,
+	4.报错ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
+		1.SET PASSWORD = PASSWORD('root');#设置密码
+		2.ALTER USER 'root'@'localhost' PASSWORD EXPIRE NEVER;
+		3.flush privileges;#重新加载权限
+6).本地连接虚拟机数据库
+	1.进入mysql命令行
+	>GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION;#允许远程访问
+	>flush privileges;#重新加载权限
+	2.vi /etc/sysconfig/iptables 防火墙开启3306端口(监听)(
+					加上这一行
+					-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT)
+	3./etc/rc.d/init.d/iptables restart 重启防火墙 
