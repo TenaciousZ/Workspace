@@ -1,0 +1,30 @@
+Redis的常用命令
+
+1.key值相关的命令:
+	
+	keys * 				列出所有的key
+	exists key 			检查key是否存在
+	del key 			删除key
+	exprie key 			设置key的有效期
+	ttl key 			查看key的有效期
+	select 0 			查询数据库0 (总共默认有0~15编号数据库)
+	move key 1			移动key到数据库1
+	persist key 		清除key的有效期限制
+	randomkey 			随机打印一个key
+	rename key1 key2 	改变key1的key值
+	type key 			查看key的数据类型
+
+
+2.服务器相关命令:
+	
+	ping xxx 			ping点什么
+	echo xxx			打印点什么
+	dbsize 				查看数据库中key的数量
+	info 				查看数据库信息
+	config get * 		列出所有的配置信息
+	flushdb				删除当前数据库中的key
+	flushall 			删除所有数据库中的key
+
+
+3.账户命令
+	auth "foobared"  	使用密码授权
